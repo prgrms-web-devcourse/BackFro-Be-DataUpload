@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/artzip
+    username: root
+    password: root1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-session-in-view: false
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000
+  profiles:
+    include:
+      - key
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
