@@ -21,4 +21,13 @@ public class DataUploadingController {
         .ok()
         .body("init success");
   }
+
+  @PostMapping("/update")
+  public ResponseEntity<String> updateExhibitioinData() {
+    int count = dataUploadingService.updateData();
+
+    return ResponseEntity
+        .ok()
+        .body(count+" exhibitions added");
+  }
 }

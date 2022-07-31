@@ -121,7 +121,7 @@ public class DataUploadingService {
       Location location = getLocation(perforInfo);
 
       exhibitionRepository.save(Exhibition.builder()
-          .seq(perforInfo.getSeq())
+          .seq(Integer.parseInt(perforInfo.getSeq()))
           .name(perforInfo.getTitle())
           .period(period)
           .location(location)
@@ -132,6 +132,45 @@ public class DataUploadingService {
           .placeUrl(perforInfo.getUrl())
           .build());
     }
+  }
+
+  @Transactional
+  public int updateData() {
+    int count = 0;
+    for(PublicDataPerfor publicDataPerfor: getPerforListForUpdate()) {
+      String seq = publicDataPerfor.getSeq();
+
+      if(exhibitionRepository.findBySeq(Integer.parseInt(seq)).isPresent()) {
+        continue;
+      }
+
+      PublicDataPerforInfo perforInfo = getPerforInfo(seq);
+
+      if(!hasText(perforInfo.getTitle()) || !hasText(perforInfo.getImgUrl()) || !hasText(perforInfo.getStartDate()) || !hasText(perforInfo.getEndDate()) ||
+          !hasText(perforInfo.getPrice()) || !hasText(perforInfo.getPlace()) || !hasText(perforInfo.getPlaceAddr()) || isNull(perforInfo.getGpsX()) || isNull(perforInfo.getGpsY()) ||
+          !hasText(perforInfo.getPhone()) || isNull(areaMap.get(perforInfo.getPlaceAddr().split(" ")[0].trim()))) {
+        continue;
+      }
+
+      Period period = getPeriod(perforInfo);
+      Location location = getLocation(perforInfo);
+
+      exhibitionRepository.save(Exhibition.builder()
+          .seq(Integer.parseInt(perforInfo.getSeq()))
+          .name(perforInfo.getTitle())
+          .period(period)
+          .location(location)
+          .inquiry(perforInfo.getPhone())
+          .fee(perforInfo.getPrice())
+          .thumbnail(perforInfo.getImgUrl())
+          .url(perforInfo.getUrl())
+          .placeUrl(perforInfo.getUrl())
+          .build());
+
+      count++;
+    }
+
+    return count;
   }
 
   private void checkAlreadyInitialized() {
@@ -153,6 +192,22 @@ public class DataUploadingService {
       throw new RuntimeException("get public data fail!");
     }
   }
+
+  private List<PublicDataPerfor> getPerforListForUpdate() {
+    String listUrl = "http://www.culture.go.kr/openapi/rest/publicperformancedisplays/realm";
+    String startDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    String endDate = LocalDate.now().plusMonths(3).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+    try {
+      URI listRequestURI = new URI(listUrl+"?serviceKey="+serviceKey+"&sortStdr=1&realmCode=D000&cPage=1&rows=1000&from="+startDate+"&to="+endDate);
+      PublicDatasResponse publicDatasResponse = restTemplate.getForObject(listRequestURI, PublicDatasResponse.class);
+      return publicDatasResponse.getMsgBody().getPerforList();
+    }catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException("get public data fail!");
+    }
+  }
+
 
   private PublicDataPerforInfo getPerforInfo(String seq) {
     String detailUrl = "http://www.culture.go.kr/openapi/rest/publicperformancedisplays/d/";

@@ -27,7 +27,7 @@ public class Exhibition extends BaseEntity {
   private Long id;
 
   @Column(name = "seq", unique = true)
-  private String seq;
+  private Integer seq;
 
   @Column(name = "name", nullable = false, length = 70)
   private String name;
@@ -61,7 +61,7 @@ public class Exhibition extends BaseEntity {
   private String placeUrl;
 
   @Builder
-  public Exhibition(String seq, String name, Period period,
+  public Exhibition(Integer seq, String name, Period period,
       Genre genre, String description, Location location, String inquiry, String fee,
       String thumbnail, String url, String placeUrl) {
     this.seq = seq;
