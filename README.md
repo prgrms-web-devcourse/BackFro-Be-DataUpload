@@ -5,3 +5,6 @@
 
 ### /api/v1/public-datas/init
 DB가 비어있는 경우 올해 전시회 정보를 DB에 저장합니다.
+
+### /api/v1/public-datas/update
+(현재 ~ 현재+3개월) 동안 업데이트된 전시회 정보를 DB에 추가합니다.
