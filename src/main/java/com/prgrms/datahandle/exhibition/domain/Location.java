@@ -1,9 +1,11 @@
 package com.prgrms.datahandle.exhibition.domain;
 
+import static javax.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Enumerated;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,7 @@ public class Location {
   @Column(name = "longitude", nullable = false)
   private Double longitude; // 경도, x
 
+  @Enumerated(STRING)
   @Column(name = "area", nullable = false, length = 20)
   private Area area; // 지역
 
