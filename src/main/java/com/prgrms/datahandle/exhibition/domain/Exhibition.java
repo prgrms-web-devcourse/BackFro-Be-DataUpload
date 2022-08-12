@@ -60,6 +60,9 @@ public class Exhibition extends BaseEntity {
   @Column(name = "placeUrl", length = 2083)
   private String placeUrl;
 
+  @Column(name = "is_deleted", nullable = false)
+  private Boolean isDeleted;
+
   @Builder
   public Exhibition(Integer seq, String name, Period period,
       Genre genre, String description, Location location, String inquiry, String fee,
@@ -75,5 +78,6 @@ public class Exhibition extends BaseEntity {
     this.thumbnail = thumbnail;
     this.url = url;
     this.placeUrl = placeUrl;
+    this.isDeleted = false;
   }
 }

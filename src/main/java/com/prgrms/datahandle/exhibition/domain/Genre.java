@@ -1,5 +1,5 @@
 package com.prgrms.datahandle.exhibition.domain;
 
 public enum Genre {
-  FINEART, MODERNART
+  ALL, PAINTING, PHOTO, MOLDINGS, INSATALLATION, MEDIA, SHOW, RELICS
 }
